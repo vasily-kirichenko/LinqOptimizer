@@ -12,19 +12,19 @@ namespace LinqOptimizer.Benchmarks.CSharp
         static void Main(string[] args)
         {
             var rnd = new Random();
-            //var v = Enumerable.Range(1, 200000000).Select(x => rnd.NextDouble()).ToArray();
-            //Measure("Sum Linq", () => SumLinq(v),
-            //        "Sum Opt", () => SumLinqOpt(v),
-            //        (x1, x2) => x1 == x2);
+            var v = Enumerable.Range(1, 200000000).Select(x => rnd.NextDouble()).ToArray();
+            Measure("Sum Linq", () => SumLinq(v),
+                    "Sum Opt", () => SumLinqOpt(v),
+                    (x1, x2) => x1 == x2);
 
-            //Measure("Sum of Squares Linq", () => SumSqLinq(v),
-            //        "Sum of Squares Opt", () => SumSqLinqOpt(v),
-            //        (x1, x2) => x1 == x2);
+            Measure("Sum of Squares Linq", () => SumSqLinq(v),
+                    "Sum of Squares Opt", () => SumSqLinqOpt(v),
+                    (x1, x2) => x1 == x2);
 
-            //var v2 = v.Take(20).ToArray();
-            ////Measure("Cartesian Linq", () => CartLinq(v, v2),
-            ////        "Cartesian Opt", () => CartLinqOpt(v, v2),
-            ////        (x1, x2) => x1 == x2);
+            var v2 = v.Take(20).ToArray();
+            Measure("Cartesian Linq", () => CartLinq(v, v2),
+                    "Cartesian Opt", () => CartLinqOpt(v, v2),
+                    (x1, x2) => x1 == x2);
 
             var g = Enumerable.Range(1, 2000000).Select(x => 1000000 * rnd.NextDouble() - 500000).ToArray();
             Measure("GroupBy Linq", () => GroupLinq(g),
@@ -32,32 +32,32 @@ namespace LinqOptimizer.Benchmarks.CSharp
                     (x1, x2) => Enumerable.SequenceEqual(x1, x2));
 
             var n = 1000;
-            //Measure("Pythagorean Triples Linq", () => PythagoreanTriplesLinq(n),
-            //        "Pythagorean Triples Opt", () => PythagoreanTriplesLinqOpt(n),
-            //        (x1, x2) => x1 == x2);
+            Measure("Pythagorean Triples Linq", () => PythagoreanTriplesLinq(n),
+                    "Pythagorean Triples Opt", () => PythagoreanTriplesLinqOpt(n),
+                    (x1, x2) => x1 == x2);
 
 
             ///////////////////////
 
-            //Measure("Parallel Sum Linq", () => ParallelSumLinq(v),
-            //        "Parallel Sum Opt", () => ParallelSumLinqOpt(v),
-            //        (x1, x2) => x1 == x2);
+            Measure("Parallel Sum Linq", () => ParallelSumLinq(v),
+                    "Parallel Sum Opt", () => ParallelSumLinqOpt(v),
+                    (x1, x2) => x1 == x2);
 
-            //Measure("Parallel Sum of Squares Linq", () => ParallelSumSqLinq(v),
-            //        "Parallel Sum of Squares Opt", () => ParallelSumSqLinqOpt(v),
-            //        (x1, x2) => x1 == x2);
+            Measure("Parallel Sum of Squares Linq", () => ParallelSumSqLinq(v),
+                    "Parallel Sum of Squares Opt", () => ParallelSumSqLinqOpt(v),
+                    (x1, x2) => x1 == x2);
 
-            ////Measure("Parallel Cartesian Linq", () => ParallelCartLinq(v, v2),
-            ////        "Parallel Cartesian Opt", () => ParallelCartLinqOpt(v, v2),
-            ////        (x1, x2) => x1 == x2);
+            Measure("Parallel Cartesian Linq", () => ParallelCartLinq(v, v2),
+                    "Parallel Cartesian Opt", () => ParallelCartLinqOpt(v, v2),
+                    (x1, x2) => x1 == x2);
 
             Measure("Parallel GroupBy Linq", () => ParallelGroupLinq(g),
                     "Parallel GroupBy Opt", () => ParallelGroupLinqOpt(g),
                     (x1, x2) => Enumerable.SequenceEqual(x1, x2));
 
-            //Measure("Parallel Pythagorean Triples Linq", () => ParallelPythagoreanTriplesLinq(n),
-            //        "Parallel Pythagorean Triples Opt", () => ParallelPythagoreanTriplesLinqOpt(n),
-            //        (x1, x2) => x1 == x2);
+            Measure("Parallel Pythagorean Triples Linq", () => ParallelPythagoreanTriplesLinq(n),
+                    "Parallel Pythagorean Triples Opt", () => ParallelPythagoreanTriplesLinqOpt(n),
+                    (x1, x2) => x1 == x2);
 
         }
 
@@ -140,7 +140,7 @@ namespace LinqOptimizer.Benchmarks.CSharp
 
         static int PythagoreanTriplesLinqOpt(int max)
         {
-            return (from a in Enumerable.Range(1, max + 1).AsQueryExpr()
+            return (from a in QueryExpr.Range(1, max + 1)
                     from b in Enumerable.Range(a, max + 1 - a)
                     from c in Enumerable.Range(b, max + 1 - b)
                     where a * a + b * b == c * c

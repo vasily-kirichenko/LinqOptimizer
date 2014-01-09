@@ -46,8 +46,7 @@ let GroupLinq(size) =
 
 let GroupLinqOpt(size) =
     let rnd = new Random(size);
-    Enumerable.Range(1, size)
-    |> Query.ofSeq
+    Query.range(1, size)
     |> Query.map (fun x -> 100. * rnd.NextDouble() - 50.)
     |> Query.groupBy(fun x -> int x % 10)
     |> Query.map(fun (_,x) -> Seq.length x)
@@ -67,8 +66,7 @@ let PythagoreanTriplesLinq(max) =
                 
 
 let PythagoreanTriplesLinqOpt(max) =
-    Enumerable.Range(1, max + 1)
-    |> Query.ofSeq
+    Query.range(1, max + 1)
     |> Query.collect(fun a ->
         Enumerable.Range(a, max + 1 - a)
         |> Seq.collect(fun b ->
