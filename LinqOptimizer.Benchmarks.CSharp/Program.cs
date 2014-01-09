@@ -13,20 +13,23 @@ namespace LinqOptimizer.Benchmarks.CSharp
         {
             var rnd = new Random();
             var v = Enumerable.Range(1, 200000000).Select(x => rnd.NextDouble()).ToArray();
+            Func<double,double,bool> cmp = (x1, x2) => Math.Abs(x1 - x2) < 1E-07;
+            
             Measure("Sum Linq", () => SumLinq(v),
                     "Sum Opt", () => SumLinqOpt(v),
-                    (x1, x2) => x1 == x2);
+                    cmp);
 
             Measure("Sum of Squares Linq", () => SumSqLinq(v),
                     "Sum of Squares Opt", () => SumSqLinqOpt(v),
-                    (x1, x2) => x1 == x2);
+                    cmp);
 
+            var v1 = v.Take(v.Length / 10).ToArray();
             var v2 = v.Take(20).ToArray();
-            Measure("Cartesian Linq", () => CartLinq(v, v2),
-                    "Cartesian Opt", () => CartLinqOpt(v, v2),
-                    (x1, x2) => x1 == x2);
+            Measure("Cartesian Linq", () => CartLinq(v1, v2),
+                    "Cartesian Opt", () => CartLinqOpt(v1, v2),
+                    cmp);
 
-            var g = Enumerable.Range(1, 2000000).Select(x => 1000000 * rnd.NextDouble() - 500000).ToArray();
+            var g = Enumerable.Range(1, 20000000).Select(x => 100000000 * rnd.NextDouble() - 50000000).ToArray();
             Measure("GroupBy Linq", () => GroupLinq(g),
                     "GroupBy Opt", () => GroupLinqOpt(g),
                     (x1, x2) => Enumerable.SequenceEqual(x1, x2));
@@ -34,22 +37,29 @@ namespace LinqOptimizer.Benchmarks.CSharp
             var n = 1000;
             Measure("Pythagorean Triples Linq", () => PythagoreanTriplesLinq(n),
                     "Pythagorean Triples Opt", () => PythagoreanTriplesLinqOpt(n),
-                    (x1, x2) => x1 == x2);
+                    cmp);
 
 
-            ///////////////////////
+            /////////////////////
+            //var pv = Enumerable.Range(1, 400000000).Select(x => rnd.NextDouble()).ToArray();
+            //var pv1 = pv.Take(pv.Length / 10).ToArray();
+            //var pv2 = pv.Take(20).ToArray();
 
-            Measure("Parallel Sum Linq", () => ParallelSumLinq(v),
-                    "Parallel Sum Opt", () => ParallelSumLinqOpt(v),
-                    (x1, x2) => x1 == x2);
+            var pv = v;
+            var pv1 = v1;
+            var pv2 = v2;
 
-            Measure("Parallel Sum of Squares Linq", () => ParallelSumSqLinq(v),
-                    "Parallel Sum of Squares Opt", () => ParallelSumSqLinqOpt(v),
-                    (x1, x2) => x1 == x2);
+            Measure("Parallel Sum Linq", () => ParallelSumLinq(pv),
+                    "Parallel Sum Opt", () => ParallelSumLinqOpt(pv),
+                    cmp);
 
-            Measure("Parallel Cartesian Linq", () => ParallelCartLinq(v, v2),
-                    "Parallel Cartesian Opt", () => ParallelCartLinqOpt(v, v2),
-                    (x1, x2) => x1 == x2);
+            Measure("Parallel Sum of Squares Linq", () => ParallelSumSqLinq(pv),
+                    "Parallel Sum of Squares Opt", () => ParallelSumSqLinqOpt(pv),
+                    cmp);
+
+            Measure("Parallel Cartesian Linq", () => ParallelCartLinq(pv1, pv2),
+                    "Parallel Cartesian Opt", () => ParallelCartLinqOpt(pv1, pv2),
+                    cmp);
 
             Measure("Parallel GroupBy Linq", () => ParallelGroupLinq(g),
                     "Parallel GroupBy Opt", () => ParallelGroupLinqOpt(g),
@@ -57,7 +67,7 @@ namespace LinqOptimizer.Benchmarks.CSharp
 
             Measure("Parallel Pythagorean Triples Linq", () => ParallelPythagoreanTriplesLinq(n),
                     "Parallel Pythagorean Triples Opt", () => ParallelPythagoreanTriplesLinqOpt(n),
-                    (x1, x2) => x1 == x2);
+                    cmp);
 
         }
 
@@ -72,7 +82,10 @@ namespace LinqOptimizer.Benchmarks.CSharp
             var t2 = action2();
             sw.Stop();
             Console.WriteLine("\"{0}\":\t{1}", title2, sw.Elapsed);
-            Console.WriteLine("Validate : {0}", validate(t1, t2));
+            var equal = validate(t1, t2);
+            Console.WriteLine("Validate : {0}", equal);
+            if(!equal)
+                Console.WriteLine("Values {0}, {1}", t1, t2);
             Console.WriteLine();
         }
 
@@ -110,21 +123,21 @@ namespace LinqOptimizer.Benchmarks.CSharp
                     select x * y).Sum().Run();
         }
 
-        static int[] GroupLinq(IEnumerable<double> values)
+        static int[] GroupLinq(double[] values)
         {
             return values
-                   .GroupBy(x => (int)x % 100000)
-                   .OrderBy(x => x.Count())
-                   .Select(k => k.Key)
+                   .GroupBy(x => (int)x / 100)
+                   .OrderBy(x => x.Key)
+                   .Select(k => k.Count())
                    .ToArray();
         }
 
-        static int[] GroupLinqOpt(IEnumerable<double> values)
+        static int[] GroupLinqOpt(double[] values)
         {
             return values.AsQueryExpr()
-                   .GroupBy(x => (int)x % 100000)
-                   .OrderBy(x => x.Count())
-                   .Select(k => k.Key)
+                   .GroupBy(x => (int)x / 100)
+                   .OrderBy(x => x.Key)
+                   .Select(k => k.Count())
                    .ToArray()
                    .Run();
         }
@@ -187,18 +200,18 @@ namespace LinqOptimizer.Benchmarks.CSharp
         static int[] ParallelGroupLinq(IEnumerable<double> values)
         {
             return values.AsParallel()
-                   .GroupBy(x => (int)x % 100000)
-                   .OrderBy(x => x.Count())
-                   .Select(k => k.Key)
+                   .GroupBy(x => (int)x / 100)
+                   .OrderBy(x => x.Key)
+                   .Select(k => k.Count())
                    .ToArray();
         }
 
         static int[] ParallelGroupLinqOpt(IEnumerable<double> values)
         {
             return values.AsParallelQueryExpr()
-                   .GroupBy(x => (int)x % 100000)
-                   .OrderBy(x => x.Count())
-                   .Select(k => k.Key)
+                   .GroupBy(x => (int)x / 100)
+                   .OrderBy(x => x.Key)
+                   .Select(k => k.Count())
                    .ToArray()
                    .Run();
         }
