@@ -197,7 +197,7 @@ namespace LinqOptimizer.Benchmarks.CSharp
                     select x * y).Sum().Run();
         }
 
-        static int[] ParallelGroupLinq(IEnumerable<double> values)
+        static int[] ParallelGroupLinq(double[] values)
         {
             return values.AsParallel()
                    .GroupBy(x => (int)x / 100)
@@ -206,7 +206,7 @@ namespace LinqOptimizer.Benchmarks.CSharp
                    .ToArray();
         }
 
-        static int[] ParallelGroupLinqOpt(IEnumerable<double> values)
+        static int[] ParallelGroupLinqOpt(double[] values)
         {
             return values.AsParallelQueryExpr()
                    .GroupBy(x => (int)x / 100)

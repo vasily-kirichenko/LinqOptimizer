@@ -1,41 +1,148 @@
-// CLR - .NET 4.5
+// CLR - .NET 4.5.1
 
-"Sum Linq":     00:00:02.5431277
-"Sum Opt":      00:00:01.2571894
+PS C:\Users\krontogiannis\Desktop\Release> .\LinqOptimizer.Benchmarks.CSharp.exe
+"Sum Linq":     00:00:02.4882719
+"Sum Opt":      00:00:01.3065410
 Validate : True
 
-"Sum of Squares Linq":  00:00:05.1914687
-"Sum of Squares Opt":   00:00:00.9242369
+"Sum of Squares Linq":  00:00:05.2756961
+"Sum of Squares Opt":   00:00:00.9198907
 Validate : True
 
-"Cartesian Linq":       00:00:23.2326541
-"Cartesian Opt":        00:00:01.7196209
+"Cartesian Linq":       00:00:22.9570171
+"Cartesian Opt":        00:00:01.7985289
 Validate : True
 
-"GroupBy Linq": 00:00:30.3496879
-"GroupBy Opt":  00:00:23.5689726
+"GroupBy Linq": 00:00:30.8481043
+"GroupBy Opt":  00:00:24.1036471
 Validate : True
 
-"Pythagorean Triples Linq":     00:00:11.3718464
-"Pythagorean Triples Opt":      00:00:00.5434461
+"Pythagorean Triples Linq":     00:00:11.3666039
+"Pythagorean Triples Opt":      00:00:00.5531833
 Validate : True
 
-"Parallel Sum Linq":    00:00:00.4488927
-"Parallel Sum Opt":     00:00:00.5923934
+"Parallel Sum Linq":    00:00:00.5915235
+"Parallel Sum Opt":     00:00:00.6187390
 Validate : True
 
-"Parallel Sum of Squares Linq": 00:00:00.7601418
-"Parallel Sum of Squares Opt":  00:00:00.3945393
+"Parallel Sum of Squares Linq": 00:00:00.7773579
+"Parallel Sum of Squares Opt":  00:00:00.3443493
 Validate : True
 
-"Parallel Cartesian Linq":      00:00:04.8086663
-"Parallel Cartesian Opt":       00:00:00.3698821
+"Parallel Cartesian Linq":      00:00:04.1006209
+"Parallel Cartesian Opt":       00:00:00.2822599
 Validate : True
 
-"Parallel GroupBy Linq":        00:00:19.0151844
-"Parallel GroupBy Opt": 00:00:08.5411210
+"Parallel GroupBy Linq":        00:00:19.1792742
+"Parallel GroupBy Opt": 00:00:10.9898634
 Validate : True
 
-"Parallel Pythagorean Triples Linq":    00:00:06.6878132
-"Parallel Pythagorean Triples Opt":     00:00:00.1744315
+"Parallel Pythagorean Triples Linq":    00:00:06.1770607
+"Parallel Pythagorean Triples Opt":     00:00:00.1449303
+Validate : True
+
+
+
+
+krontogiannis@benchmarks-suse:~> mono -V
+Mono JIT compiler version 3.0.4 (tarball Thu Mar  7 10:40:07 UTC 2013)
+Copyright (C) 2002-2012 Novell, Inc, Xamarin Inc and Contributors. www.mono-project.com
+        TLS:           __thread
+        SIGSEGV:       altstack
+        Notifications: epoll
+        Architecture:  amd64
+        Disabled:      none
+        Misc:          softdebug
+        LLVM:          supported, not enabled.
+        GC:            Included Boehm (with typed GC and Parallel Mark)
+
+krontogiannis@benchmarks-suse:~> mono LinqOptimizer.Benchmarks.CSharp.exe --gc=boehm
+"Sum Linq":     00:00:05.6977650
+"Sum Opt":      00:00:01.5374375
+Validate : True
+
+"Sum of Squares Linq":  00:00:15.5541196
+"Sum of Squares Opt":   00:00:01.4809488
+Validate : True
+
+"Cartesian Linq":       00:00:33.3545918
+"Cartesian Opt":        00:00:03.2554914
+Validate : True
+
+"GroupBy Linq": INF
+"GroupBy Opt":  00:00:14.4638251
+Validate : True
+
+"Pythagorean Triples Linq":     00:00:41.2675174
+"Pythagorean Triples Opt":      00:00:00.9898223
+Validate : True
+
+"Parallel Sum Linq":    00:00:38.6001130
+"Parallel Sum Opt":     00:00:04.6659863
+Validate : False
+Values 100002834.384839, 100002834.384842
+
+"Parallel Sum of Squares Linq": 00:00:39.3777961
+"Parallel Sum of Squares Opt":  00:00:01.9471529
+Validate : False
+Values 66669094.7481553, 66669094.7481595
+
+"Parallel Cartesian Linq":      00:01:19.0215583
+"Parallel Cartesian Opt":       00:00:00.5005809
+Validate : False
+Values 119693758.794496, 119693758.794503
+
+"Parallel GroupBy Linq":        00:01:03.8937090
+"Parallel GroupBy Opt": 00:00:20.0196676
+Validate : True
+
+"Parallel Pythagorean Triples Linq":    00:00:49.3715419
+"Parallel Pythagorean Triples Opt":     00:00:00.1776788
+Validate : True
+
+
+
+
+krontogiannis@benchmarks-suse:~> mono LinqOptimizer.Benchmarks.CSharp.exe --gc=sgen
+"Sum Linq":     00:00:05.7998593
+"Sum Opt":      00:00:01.5160914
+Validate : True
+
+"Sum of Squares Linq":  00:00:17.7935761
+"Sum of Squares Opt":   00:00:01.4834264
+Validate : True
+
+"Cartesian Linq":       00:00:34.3443617
+"Cartesian Opt":        00:00:03.2562661
+Validate : True
+
+"GroupBy Linq": 00:00:00.0000408
+"GroupBy Opt":  00:00:14.5225747
+Validate : True
+
+"Pythagorean Triples Linq":     00:00:41.3427813
+"Pythagorean Triples Opt":      00:00:00.9896847
+Validate : True
+
+"Parallel Sum Linq":    00:00:28.6741257
+"Parallel Sum Opt":     00:00:01.8270092
+Validate : False
+Values 99998558.1943546, 99998558.194349
+
+"Parallel Sum of Squares Linq": 00:00:32.8208704
+"Parallel Sum of Squares Opt":  00:00:02.6051483
+Validate : False
+Values 66665945.3143208, 66665945.3143219
+
+"Parallel Cartesian Linq":      00:00:55.5233462
+"Parallel Cartesian Opt":       00:00:00.4901280
+Validate : False
+Values 80982627.9073865, 80982627.9073846
+
+"Parallel GroupBy Linq":        00:00:56.3008424
+"Parallel GroupBy Opt": 00:00:32.1725844
+Validate : True
+
+"Parallel Pythagorean Triples Linq":    00:00:27.1318891
+"Parallel Pythagorean Triples Opt":     00:00:00.1645247
 Validate : True
