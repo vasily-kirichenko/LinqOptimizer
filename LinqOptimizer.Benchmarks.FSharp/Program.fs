@@ -192,6 +192,6 @@ let main argv =
     
     measuref("Parallel Pythagorean Linq", (fun () -> ParallelPythagoreanTriplesLinq n), 
              "Parallel Pythagorean Opt", (fun () ->  ParallelPythagoreanTriplesLinqOpt n ), 
-             fun (x, y) -> printf "%A %A" x y; x = y)
+             fun (x, y) -> x = y)
 
     0 
