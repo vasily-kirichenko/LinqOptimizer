@@ -170,7 +170,7 @@ let main argv =
     let n = 1000
     measuref("Pythagorean Seq", (fun () -> PythagoreanTriplesLinq n), 
              "Pythagorean Opt", (fun () -> PythagoreanTriplesLinqOpt n ), 
-             fun (x, y) -> printf "%A %A" x y; x = y)
+             fun (x, y) -> x = y)
 
     ////////////////////////////////////////////////////////////////////////////
 
