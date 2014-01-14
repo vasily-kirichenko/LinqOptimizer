@@ -42,7 +42,7 @@
   <ItemGroup>
     <Compile Include="Program.fs" />
     <None Include="App.config" />
-    <Content Include="results.txt" />
+    <Content Include="results-fsharp.txt" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
